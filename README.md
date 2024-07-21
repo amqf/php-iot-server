@@ -8,7 +8,7 @@ Receive data from IoT devices and send to WebSocket clients in real-time!
 
 Receba dados de dispositivos IoT e entregue-os a clientes WebSocket em tempo real!
 
-## Join Our Project and Contribute to Our PHP IoT Broker!
+## Join Our Project and Contribute to Our PHP IoT Server!
 
 Our project offers:
 
@@ -22,10 +22,10 @@ Connection Management: Manage WebSocket connections to ensure messages from IoT 
 
 Real-Time Updates: Provide real-time updates to clients as MQTT messages are processed.
 
-Summary: The PHP IoT Broker integrates IoT devices with a real-time WebSocket-based communication system, rapidly disseminating device information to connected clients.
+Summary: The PHP IoT Server integrates IoT devices with a real-time WebSocket-based communication system, rapidly disseminating device information to connected clients.
 
 
-## Participe do Nosso Projeto e Contribua com o Nosso PHP IoT Broker!
+## Participe do Nosso Projeto e Contribua com o Nosso PHP IoT Server!
 
 Nosso projeto oferece:
 
@@ -39,7 +39,7 @@ Gerenciamento de Conexões: Gerencie conexões WebSocket para garantir que as me
 
 Atualizações em Tempo Real: Forneça atualizações em tempo real para os clientes à medida que as mensagens MQTT são processadas.
 
-Resumo: O PHP IoT Broker integra dispositivos IoT com um sistema de comunicação em tempo real baseado em WebSocket, disseminando rapidamente as informações dos dispositivos para os clientes conectados.
+Resumo: O PHP IoT Server integra dispositivos IoT com um sistema de comunicação em tempo real baseado em WebSocket, disseminando rapidamente as informações dos dispositivos para os clientes conectados.
 
 Envolva-se e ajude a melhorar este projeto empolgante!
 
@@ -64,7 +64,7 @@ Envolva-se e ajude a melhorar este projeto empolgante!
 
 ### What is?
 
-The MQTT Server is a Data Provider for PHP IoT Broker.
+The MQTT Server is a Data Provider for PHP IoT Server.
 
 You can use - [Mosquitto](https://mosquitto.org/download/) as a MQTT Server! Is a lightweight solution.
 
