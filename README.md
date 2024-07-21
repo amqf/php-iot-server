@@ -47,6 +47,7 @@ Envolva-se e ajude a melhorar este projeto empolgante!
 
 # Use Case
 
+```gherkin
 - Feature: Realtime Dashboard for IoT Systems
 
   Scenario: Display real-time data on the dashboard
@@ -54,7 +55,7 @@ Envolva-se e ajude a melhorar este projeto empolgante!
     And the dashboard application is running
     When the dashboard receives new data from the MQTT broker
     Then the dashboard should update the displayed data in real-time
-
+```
 
 # Environment
 
@@ -162,6 +163,8 @@ Equipamentos de Agricultura Inteligente: Sensores e dispositivos em fazendas que
 ## Up MQTT Broker
 
 - Receive MQTT data from a IoT Devices
+
+Choose your MQTT Broker. You can use Mosquitto too.
 
 ```bash
 sudo systemctl start mosquitto
