@@ -1,0 +1,4 @@
+IOT MQTT ROUTER MyRouter1
+SHOULD SUBSCRIBE MQTT TOPICS omega_clinic/1/stdah/pre/feed_pressure, topic2, topic3
+FROM MQTT BROKER SERVER localhost:1883
+BROADCASTING DATA TO WEBSOCKET SERVER localhost:8081

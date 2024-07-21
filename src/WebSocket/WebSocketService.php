@@ -10,13 +10,13 @@ class WebSocketService
 {
     private WebSocketClient $client;
 
-    public function __construct(string $serverUrl)
+    public function __construct(string $host)
     {
         try{
-            $this->client = new WebSocketClient($serverUrl);
+            $this->client = new WebSocketClient($host);
         }catch(Exception $e)
         {
-            throw new DomainException("Unreachable Web Socket Server $serverUrl");
+            throw new DomainException("Unreachable WebSocket Server $host");
         }
     }
 
