@@ -167,21 +167,19 @@ Equipamentos de Agricultura Inteligente: Sensores e dispositivos em fazendas que
 sudo systemctl start mosquitto
 ```
 
-## Up WebSocket Server
+## Up PHP IoT Server
 
-Broadcast IoT MQTT messages to WebSocket Clients in real-time!
+Create a config.iotws:
 
-```php
-./php web-socket-server.php
+```bash
+IOT MQTT ROUTER MyRouter1
+SHOULD SUBSCRIBE MQTT TOPICS topic1, topic2, topic3
+FROM MQTT BROKER SERVER localhost:1883
+BROADCASTING DATA TO WEBSOCKET SERVER localhost:8081
 ```
 
-## Up IoT MQTT Router
-
-- Subscribe topics from MQTT Server
-- Redirect MQTT Data to WebSocket Server
-
 ```php
-$ ./php iot-mqtt-router.php
+$ ./php iot-mqtt-router.php -c config.iotws
 ```
 
 ## Exceptions Throwable
