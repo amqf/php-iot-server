@@ -8,42 +8,27 @@ use AMQF\IoTServer\WebSocketServer;
 use React\EventLoop\Loop;
 use Swoole\Coroutine;
 // use Swoole\Coroutine\Server;
-use Swoole\WebSocket\Server;
+// use Swoole\WebSocket\Server;
 
 require_once './vendor/autoload.php';
 
 // new WebSocketServer();
 define('CONFIG_PATH', './config.iotws');
 
+use Swoole\Http\Server;
 
-// // Configurações do servidor WebSocket
-// $server = new Server("127.0.0.1", 9501);
+$server = new Server("127.0.0.1", 9501);
 
-// // var_dump($server);die();
+$server->on("request", function ($request, $response) {
+    $response->header("Content-Type", "text/plain");
+    $response->end("Hello, Swoole!");
+});
 
-// // Evento: quando um cliente se conecta
-// $server->on('open', function ($server, $request) {
-//     echo "Connection opened: {$request->fd}\n";
-// });
-
-// // Evento: quando o servidor recebe uma mensagem do cliente
-// $server->on('message', function ($server, $frame) {
-//     echo "Message from client {$frame->fd}: {$frame->data}\n";
-//     // Enviar uma resposta para o cliente
-//     $server->push($frame->fd, "Server received: {$frame->data}");
-// });
-
-// // Evento: quando um cliente se desconecta
-// $server->on('close', function ($server, $fd) {
-//     echo "Connection closed: {$fd}\n";
-// });
-
-// // Iniciar o servidor
-// $server->start();
+$server->start();
 
 try
 {
-    // Exemplo de uso
+    // Web Socket Server
     $webSocketServer = new WebSocketServer('127.0.0.1', 9501);
     $webSocketServer->onOpen(
         function ($fd)
