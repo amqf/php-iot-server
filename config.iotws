@@ -1,0 +1,4 @@
+IOT MQTT ROUTER MyRouter1
+SUBSCRIBING MQTT TOPICS topic1, topic2, topic3, topic4, topic5
+FROM MQTT BROKER SERVER localhost:1883
+BROADCASTING TO ws://user:pass@localhost:8081 WITH WEBSOCKET SERVER
