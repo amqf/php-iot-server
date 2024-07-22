@@ -3,8 +3,11 @@
 use AMQF\IoTServer\App;
 use AMQF\IoTServer\Config\IoTWSConfig;
 use AMQF\IoTServer\Config\ConfigurationException;
+use AMQF\IoTServer\Monitoring\Logger;
 use AMQF\IoTServer\MQTTClient;
 use AMQF\IoTServer\WebSocketServer;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger as MonologLogger;
 use React\EventLoop\Loop;
 use Swoole\Coroutine;
 // use Swoole\Coroutine\Server;
@@ -17,10 +20,17 @@ define('CONFIG_PATH', './config.iotws');
 
 use Swoole\Http\Server;
 
+
+// Logger::setup(function(MonologLogger $instance){
+//     $instance->pushHandler(new StreamHandler(__DIR__ . '/logs.log', MonologLogger::DEBUG));
+//     return $instance;
+// });
+
 // $server = new Server("127.0.0.1", 9501);
 
 // $server->on("request", function ($request, $response) {
 //     $response->header("Content-Type", "text/plain");
+//     Logger::info('sensacional');
 //     $response->end("Hello, Swoole!");
 // });
 
@@ -33,19 +43,19 @@ try
     $webSocketServer->onOpen(
         function ($fd)
         {
-            echo $fd;
+            Logger::debug($fd);
         }
     );
     $webSocketServer->onMessage(
         function ($client, $data)
         {
-            echo $data;
+            Logger::debug($data);
         }
     );
     $webSocketServer->onClose(
         function ($fd)
         {
-            echo $fd;
+            Logger::debug($fd);
         }
     );
     $webSocketServer->start();
@@ -69,8 +79,12 @@ try
     // $main->run();
 }catch(ConfigurationException $exception)
 {
-    echo 'Check configuration ' . CONFIG_PATH . PHP_EOL;
-    echo 'Syntax error: ' . $exception->getMessage() . PHP_EOL;
+    Logger::debug(
+        sprintf(
+            '%s. %s',
+            'Check configuration ' . CONFIG_PATH,
+            'Syntax error: ' . $exception->getMessage() . PHP_EOL
+        )
+    );
     exit();
 }
-

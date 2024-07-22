@@ -7,7 +7,8 @@
         "php-mqtt/client": "^2.1",
         "cboden/ratchet": "^0.4.4",
         "ratchet/pawl": "^0.4.1",
-        "reactivex/rxphp": "^2.0"
+        "reactivex/rxphp": "^2.0",
+        "monolog/monolog": "^3.7"
     },
     "autoload": {
         "psr-4": {

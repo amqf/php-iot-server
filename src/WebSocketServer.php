@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AMQF\IoTServer;
 
+use AMQF\IoTServer\Monitoring\Logger;
 use Swoole\WebSocket\Server as SwooleWebSocketServer;
 use Swoole\Http\Request;
 use Swoole\WebSocket\Frame;
@@ -34,7 +35,7 @@ class WebSocketServer
             'open',
             function (SwooleWebSocketServer $server, Request $request) use ($callback)
             {
-                echo "Connection opened: {$request->fd}\n";
+                Logger::debug("Connection opened: {$request->fd}\n");
                 $callback($request->fd);
             }
         );
@@ -47,7 +48,7 @@ class WebSocketServer
             'message',
             function (SwooleWebSocketServer $server, Frame $frame) use ($callback)
             {
-                echo "Message from client {$frame->fd}: {$frame->data}\n";
+                Logger::debug("Message from client {$frame->fd}: {$frame->data}\n");
                 $callback($frame->id, $frame->data);
 
                 // Enviar uma resposta para o cliente
@@ -63,7 +64,7 @@ class WebSocketServer
             'close',
             function (SwooleWebSocketServer $server, int $fd) use ($callback)
             {
-                echo "Connection closed: {$fd}\n";
+                Logger::debug("Connection closed: {$fd}\n");
                 $callback($fd);
             }
         );
