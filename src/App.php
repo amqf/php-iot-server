@@ -7,6 +7,7 @@ use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory as LoopFactory;
+use React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
 
 class App
@@ -17,17 +18,11 @@ class App
 
     public function run()
     {
-        /** @var LoopInterface */
         $loop = LoopFactory::create();
 
-        /** @var WebSocketServer */
         $wsServer = new WebSocketServer();
 
         $webSock = new \React\Socket\Server('0.0.0.0:8081', $loop);
-
-        /**
-         * Não retorna nada? Fica no loop e não prossegue?
-         */
         $webServer = new IoServer(
             new HttpServer(
                 new WsServer(
@@ -40,8 +35,7 @@ class App
 
         echo "WebSocket Server is running on ws://localhost:8081\n";
 
-        /** @var MqttClient */
-        $mqttClient = new MqttClient($this->_config->getMQTTClientSettings());
+        $mqttClient = new MQTTClient($this->_config->getMQTTClientSettings());
 
         $mqttClient->connect();
 
@@ -50,6 +44,8 @@ class App
             $wsServer->broadcast(json_encode(['topic' => $topic, 'message' => $message]));
         });
 
-        $loop->run();
+        $mqttClient->run();
+
+        // $loop->run();
     }
 }

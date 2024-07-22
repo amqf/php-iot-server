@@ -62,7 +62,23 @@ Envolva-se e ajude a melhorar este projeto empolgante!
 ## Requirements
 
 - PHP 8.3
-- Swoole
+```bash
+$ sudo apt install php-8.3
+```
+
+- PHP ZTS for use Swoole (https://github.com/amqf/php-zts-installer)
+
+- Swoole 
+```bash
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt-get update
+sudo apt install php8.3-swoole
+
+# with-php-conf deve apontar para o prefixo configurado na compilação do PHP ZTS (./configure --prefix=/usr/local/php)
+# sudo pecl install swoole --with-php-config=/usr/local/php/bin/php-config
+```
+
 
 ## MQTT Broker
 

@@ -1,51 +1,79 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AMQF\IoTServer;
 
-use Ratchet\MessageComponentInterface;
-use Ratchet\ConnectionInterface;
-use SplObjectStorage;
+use Swoole\WebSocket\Server as SwooleWebSocketServer;
+use Swoole\Http\Request;
+use Swoole\WebSocket\Frame;
 
-class WebSocketServer implements MessageComponentInterface
+class WebSocketServer
 {
-    protected $clients;
+    private SwooleWebSocketServer $server;
+    private string $host;
+    private int $port;
 
-    public function __construct()
+    /**
+     * Construtor da classe WebSocketServer.
+     *
+     * @param string $host Endereço IP ou hostname para o servidor.
+     * @param int $port Porta para o servidor WebSocket.
+     */
+    public function __construct(string $host = '127.0.0.1', int $port = 9501)
     {
-        $this->clients = new SplObjectStorage;
+        $this->host = $host;
+        $this->port = $port;
+        $this->server = new SwooleWebSocketServer($this->host, $this->port);
     }
 
-    public function onOpen(ConnectionInterface $conn)
+    public function onOpen(callable $callback): void
     {
-        $this->clients->attach($conn);
-        echo "New connection! ({$conn->resourceId})\n";
-    }
-
-    public function onMessage(ConnectionInterface $from, $msg)
-    {
-        foreach ($this->clients as $client) {
-            if ($from !== $client) {
-                $client->send($msg);
+        // Evento: quando um cliente se conecta
+        $this->server->on(
+            'open',
+            function (SwooleWebSocketServer $server, Request $request) use ($callback)
+            {
+                echo "Connection opened: {$request->fd}\n";
+                $callback($request->fd);
             }
-        }
+        );
     }
 
-    public function onClose(ConnectionInterface $conn)
+    public function onMessage(callable $callback): void
     {
-        $this->clients->detach($conn);
-        echo "Connection {$conn->resourceId} has disconnected\n";
+        // Evento: quando o servidor recebe uma mensagem do cliente
+        $this->server->on(
+            'message',
+            function (SwooleWebSocketServer $server, Frame $frame) use ($callback)
+            {
+                echo "Message from client {$frame->fd}: {$frame->data}\n";
+                $callback($frame->id, $frame->data);
+
+                // Enviar uma resposta para o cliente
+                // $server->push($frame->fd, "Server received: {$frame->data}");
+            }
+        );
     }
 
-    public function onError(ConnectionInterface $conn, \Exception $e)
+    public function onClose(callable $callback): void
     {
-        echo "An error has occurred: {$e->getMessage()}\n";
-        $conn->close();
+        // Evento: quando um cliente se desconecta
+        $this->server->on(
+            'close',
+            function (SwooleWebSocketServer $server, int $fd) use ($callback)
+            {
+                echo "Connection closed: {$fd}\n";
+                $callback($fd);
+            }
+        );
     }
 
-    public function broadcast($msg)
+    /**
+     * Inicia o servidor WebSocket.
+     */
+    public function start(): void
     {
-        foreach ($this->clients as $client) {
-            $client->send($msg);
-        }
+        $this->server->start();
     }
 }
