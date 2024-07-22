@@ -17,14 +17,14 @@ define('CONFIG_PATH', './config.iotws');
 
 use Swoole\Http\Server;
 
-$server = new Server("127.0.0.1", 9501);
+// $server = new Server("127.0.0.1", 9501);
 
-$server->on("request", function ($request, $response) {
-    $response->header("Content-Type", "text/plain");
-    $response->end("Hello, Swoole!");
-});
+// $server->on("request", function ($request, $response) {
+//     $response->header("Content-Type", "text/plain");
+//     $response->end("Hello, Swoole!");
+// });
 
-$server->start();
+// $server->start();
 
 try
 {

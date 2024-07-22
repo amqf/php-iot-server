@@ -10,7 +10,7 @@ use Swoole\WebSocket\Frame;
 
 class WebSocketServer
 {
-    private SwooleWebSocketServer $server;
+    private SwooleWebSocketServer $_server;
     private string $host;
     private int $port;
 
@@ -24,13 +24,13 @@ class WebSocketServer
     {
         $this->host = $host;
         $this->port = $port;
-        $this->server = new SwooleWebSocketServer($this->host, $this->port);
+        $this->_server = new SwooleWebSocketServer($this->host, $this->port);
     }
 
     public function onOpen(callable $callback): void
     {
         // Evento: quando um cliente se conecta
-        $this->server->on(
+        $this->_server->on(
             'open',
             function (SwooleWebSocketServer $server, Request $request) use ($callback)
             {
@@ -43,7 +43,7 @@ class WebSocketServer
     public function onMessage(callable $callback): void
     {
         // Evento: quando o servidor recebe uma mensagem do cliente
-        $this->server->on(
+        $this->_server->on(
             'message',
             function (SwooleWebSocketServer $server, Frame $frame) use ($callback)
             {
@@ -59,7 +59,7 @@ class WebSocketServer
     public function onClose(callable $callback): void
     {
         // Evento: quando um cliente se desconecta
-        $this->server->on(
+        $this->_server->on(
             'close',
             function (SwooleWebSocketServer $server, int $fd) use ($callback)
             {
@@ -74,6 +74,6 @@ class WebSocketServer
      */
     public function start(): void
     {
-        $this->server->start();
+        $this->_server->start();
     }
 }
