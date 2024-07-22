@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT WebSocket Client</title>
+    <!-- Materialize CSS CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        #messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .message-item {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align">MQTT WebSocket Client</h1>
+
+        <form id="mqttForm" class="col s12">
+            <div class="input-field col s6">
+                <input id="topic" type="text" class="validate" required>
+                <label for="topic">Topic</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="value" type="text" class="validate" required>
+                <label for="value">Value</label>
+            </div>
+            <div class="input-field col s12">
+                <button type="submit" class="btn waves-effect waves-light">Send</button>
+            </div>
+        </form>
+
+        <div id="messages" class="card-panel">
+            <h5>Messages:</h5>
+            <div id="messageList"></div>
+        </div>
+    </div>
+
+    <!-- Materialize JS and dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        const wsUrl = 'ws://localhost:8081';
+        const ws = new WebSocket(wsUrl);
+        const messagesDiv = document.getElementById('messageList');
+        const form = document.getElementById('mqttForm');
+
+        ws.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        ws.onmessage = (event) => {
+            console.log('Received message:', event.data);
+            const data = JSON.parse(event.data);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-item';
+            messageDiv.textContent = `Topic: ${data.topic} - Message: ${data.message}`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        };
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const topic = document.getElementById('topic').value;
+            const value = document.getElementById('value').value;
+
+            fetch('http://localhost:3000/publish', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ topic, value })
+            })
+            .then(response => response.text())
+            .then(text => M.toast({html: text}))
+            .catch(error => M.toast({html: 'Error: ' + error}));
+        });
+    </script>
+</body>
+</html>
